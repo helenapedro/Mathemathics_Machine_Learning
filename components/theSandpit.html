@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>PageRank</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>theSandpit</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7483,7 +7483,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="PageRank">PageRank<a class="anchor-link" href="#PageRank">¶</a></h1><p><img alt="PageRank" src="../images/PageRanks-Example.svg.png"/></p>
+<h1 id="The-Sandpit">The Sandpit<a class="anchor-link" href="#The-Sandpit">¶</a></h1>
 </div>
 </div>
 </div>
@@ -7505,117 +7505,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The task involves developing a function in Python to calculate the PageRank for an arbitrarily large probability matrix using the power iteration method. This function computes the principal eigenvector of the damped system, where the damping parameter <strong>d</strong> is defined within the function. The input to the function is the link matrix, representing the connectivity of web pages, and the damping parameter <strong>d</strong>.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Before we begin, let's load the libraries.</span>
-<span class="o">%</span><span class="k">pylab</span> notebook
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">numpy.linalg</span> <span class="k">as</span> <span class="nn">la</span>
-<span class="kn">from</span> <span class="nn">readonly.PageRankFunctions</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">suppress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Populating the interactive namespace from numpy and matplotlib
-</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Case-of-Study">Case of Study<a class="anchor-link" href="#Case-of-Study">¶</a></h3><p>A micro-internet, with just 6 websites (<strong>A</strong>vocado, <strong>B</strong>ullseye, <strong>C</strong>atBabel, <strong>D</strong>romeda, <strong>e</strong>Tings, and <strong>F</strong>aceSpace). Each website links to some of the others, and this forms a network as shown,</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><img alt="A Micro-Internet" src="../images/internet.png/"/></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In this case scenario, I have 100 <em>Procrastinating Pat</em>s on my micro-internet, each viewing a single website at a time.</p>
-<ul>
-<li>Each minute the Pats follow a link on their website to another site on the micro-internet.</li>
-<li>After a while, the websites that are most linked to will have more Pats visiting them, and</li>
-<li>in the long run, each minute for every Pat that leaves a website, another will enter keeping the total numbers of Pats on each website constant.
-The PageRank is simply the ranking of websites by how many Pats they have on them at the end of this process.</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>I represent the number of Pats on each website with the vector,
-$$\mathbf{r} = \begin{bmatrix} r_A \\ r_B \\ r_C \\ r_D \\ r_E \\ r_F \end{bmatrix}$$
-And say that the number of Pats on each website in minute $i+1$ is related to those at minute $i$ by the matrix transformation</p>
-<p>$$ \mathbf{r}^{(i+1)} = L \,\mathbf{r}^{(i)}$$
-with the matrix $L$ taking the form,
-$$ L = \begin{bmatrix}
-L_{A→A} &amp; L_{B→A} &amp; L_{C→A} &amp; L_{D→A} &amp; L_{E→A} &amp; L_{F→A} \\
-L_{A→B} &amp; L_{B→B} &amp; L_{C→B} &amp; L_{D→B} &amp; L_{E→B} &amp; L_{F→B} \\
-L_{A→C} &amp; L_{B→C} &amp; L_{C→C} &amp; L_{D→C} &amp; L_{E→C} &amp; L_{F→C} \\
-L_{A→D} &amp; L_{B→D} &amp; L_{C→D} &amp; L_{D→D} &amp; L_{E→D} &amp; L_{F→D} \\
-L_{A→E} &amp; L_{B→E} &amp; L_{C→E} &amp; L_{D→E} &amp; L_{E→E} &amp; L_{F→E} \\
-L_{A→F} &amp; L_{B→F} &amp; L_{C→F} &amp; L_{D→F} &amp; L_{E→F} &amp; L_{F→F} \\
-\end{bmatrix}
-$$
-where the columns represent the probability of leaving a website for any other website, and sum to one.
-The rows determine how likely I am to enter a website from any other, though these need not add to one.
-The long time behaviour of this system is when $ \mathbf{r}^{(i+1)} = \mathbf{r}^{(i)}$, so I'll drop the superscripts here, and that allows me to write,
-$$ L \,\mathbf{r} = \mathbf{r}$$</p>
-<p>which is an eigenvalue equation for the matrix $L$, with eigenvalue 1 (this is guaranteed by the probabalistic structure of the matrix $L$).</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The task involves helping the supervisor of a building site locate their mobile phone, which has fallen into a pit with an uneven floor covered by sand. The supervisor has crafted a 'dip-stick' to measure the slope of the floor at different points by clicking on them. The objective is to find the lowest point in the sandpit where the phone is located, using as few dips as possible.</p>
 </div>
 </div>
 </div>
@@ -7624,16 +7514,11 @@ $$ L \,\mathbf{r} = \mathbf{r}$$</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [45]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># probability of clicking a link to each website when leaving Website F (FaceSpace).</span>
-<span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span> <span class="p">],</span>
-              <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-              <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="p">],</span>
-              <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="p">],</span>
-              <span class="p">[</span><span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span> <span class="p">],</span>
-              <span class="p">[</span><span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span> <span class="p">]])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">run</span> "sandpit-exercises.ipynb"
+<span class="n">sandpit_intro</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -7646,41 +7531,7 @@ $$ L \,\mathbf{r} = \mathbf{r}$$</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>I only care about the principal eigenvector (the one with the largest eigenvalue, which will be 1 in this case), I'll use the <em>power iteration method</em> which will scale better, and is faster for large systems.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [46]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># peeking at the PageRank for this micro-internet.</span>
-<span class="n">eVals</span><span class="p">,</span> <span class="n">eVecs</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="c1"># Gets the eigenvalues and vectors</span>
-<span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">eVals</span><span class="p">)</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Orders them by their eigenvalues</span>
-<span class="n">eVals</span> <span class="o">=</span> <span class="n">eVals</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
-<span class="n">eVecs</span> <span class="o">=</span> <span class="n">eVecs</span><span class="p">[:,</span><span class="n">order</span><span class="p">]</span>
-
-<span class="n">r</span> <span class="o">=</span> <span class="n">eVecs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># Sets r to be the principal eigenvector</span>
-<span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">r</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">r</span><span class="p">))</span> <span class="c1"># Make this eigenvector sum to one, then multiply by 100 Procrastinating Pats</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[46]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([ 16.        ,   5.33333333,  40.        ,  25.33333333,
-         0.        ,  13.33333333])</pre>
-</div>
+<p><img alt="S1" src="../images/s1.png"/></p>
 </div>
 </div>
 </div>
@@ -7691,11 +7542,7 @@ $$ L \,\mathbf{r} = \mathbf{r}$$</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>👆🏽💡</p>
-<ul>
-<li>From the list we see the number of Procrastinating Pats that we expect to find on each website after long times.</li>
-<li>In order of <em>popularity</em> (based on this metric), the PageRank of this micro-internet is:</li>
-</ul>
+<p><code>Depth Only</code></p>
 </div>
 </div>
 </div>
@@ -7706,196 +7553,8 @@ $$ L \,\mathbf{r} = \mathbf{r}$$</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>C</strong>atBabel, <strong>D</strong>romeda, <strong>A</strong>vocado, <strong>F</strong>aceSpace, <strong>B</strong>ullseye, <strong>e</strong>Tings</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Using-the-Power-Iteration-method---This-method-will-be-much-better-at-dealing-with-large-systems.">Using the Power-Iteration method - This method will be much better at dealing with large systems.<a class="anchor-link" href="#Using-the-Power-Iteration-method---This-method-will-be-much-better-at-dealing-with-large-systems.">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [47]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">/</span> <span class="mi">6</span> <span class="c1"># Seting up this vector (6 entries of 1/6 × 100 each)</span>
-<span class="n">r</span> 
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[47]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([ 16.66666667,  16.66666667,  16.66666667,  16.66666667,
-        16.66666667,  16.66666667])</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [48]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">L</span> <span class="o">@</span> <span class="n">r</span> <span class="c1"># Applying matrix L to r</span>
-<span class="n">r</span> 
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[48]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([ 13.88888889,  13.88888889,  38.88888889,  27.77777778,
-         0.        ,   5.55555556])</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Automation applying this matrix multiple times as follows,</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [49]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">/</span> <span class="mi">6</span> <span class="c1"># Seting up this vector (6 entries of 1/6 × 100 each)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="p">:</span> <span class="c1"># Repeating 100 times</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">L</span> <span class="o">@</span> <span class="n">r</span>
-<span class="n">r</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[49]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([ 16.        ,   5.33333333,  40.        ,  25.33333333,
-         0.        ,  13.33333333])</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>running until  get to the required tolerance.</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [50]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">/</span> <span class="mi">6</span> <span class="c1"># Sets up this vector (6 entries of 1/6 × 100 each)</span>
-<span class="n">lastR</span> <span class="o">=</span> <span class="n">r</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">L</span> <span class="o">@</span> <span class="n">r</span>
-<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">while</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">lastR</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.01</span> <span class="p">:</span>
-    <span class="n">lastR</span> <span class="o">=</span> <span class="n">r</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">L</span> <span class="o">@</span> <span class="n">r</span>
-    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" iterations to convergence."</span><span class="p">)</span>
-<span class="n">r</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>18 iterations to convergence.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[50]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([ 16.00149917,   5.33252025,  39.99916911,  25.3324738 ,
-         0.        ,  13.33433767])</pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The PageRank order is established fairly quickly, and the vector converges on the value we calculated earlier after a few tens of repeats.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Damping-Parameter">Damping Parameter<a class="anchor-link" href="#Damping-Parameter">¶</a></h3><p>The system I just studied above converged fairly quickly to the correct answer.
-I will now consider an extension to the micro-internet where things start to go wrong.</p>
-<p>Say a new website is added to the micro-internet: <em>Geoff's</em> Website.
-This website is linked to by <em>FaceSpace</em> and only links to itself.
-<img alt="An Expanded Micro-Internet" src="../images/internet2.png" title="An Expanded Micro-Internet"/></p>
-<p>Intuitively, only <em>FaceSpace</em>, which is in the bottom half of the page rank, links to this website amongst the two others it links to, so I expect <em>Geoff's</em> site to have a correspondingly low PageRank score.</p>
+<p>Before trying the dip-stick that measures the Jacobian, the supervisor had contructed a dip-stick that can only measure the depth on each dip.</p>
+<p>Without information about the Jacobian, I will try and find the supervisor's phone.</p>
 </div>
 </div>
 </div>
@@ -7904,63 +7563,24 @@ This website is linked to by <em>FaceSpace</em> and only links to itself.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [51]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Building the new L matrix for the expanded micro-internet, </span>
-<span class="c1"># Using Power-Iteration on the Procrastinating Pat vector.</span>
-<span class="n">L2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-               <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-               <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-               <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-               <span class="p">[</span><span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-               <span class="p">[</span><span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">],</span>
-               <span class="p">[</span><span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="p">]])</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">run</span> "sandpit-exercises.ipynb"
+<span class="n">sandpit_depth_only</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [52]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="o">/</span> <span class="mi">7</span> <span class="c1"># Setting up this vector (6 entries of 1/6 × 100 each)</span>
-<span class="n">lastR</span> <span class="o">=</span> <span class="n">r</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">L2</span> <span class="o">@</span> <span class="n">r</span>
-<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">while</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">lastR</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.01</span> <span class="p">:</span>
-    <span class="n">lastR</span> <span class="o">=</span> <span class="n">r</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">L2</span> <span class="o">@</span> <span class="n">r</span>
-    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" iterations to convergence."</span><span class="p">)</span>
-<span class="n">r</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>46 iterations to convergence.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[52]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([  0.01077429,   0.00420324,   0.02131321,   0.01251789,
-         0.        ,  85.66547709,  14.28571429])</pre>
-</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><img alt="S2" src="../images/s2.png"/></p>
 </div>
 </div>
 </div>
@@ -7971,8 +7591,7 @@ This website is linked to by <em>FaceSpace</em> and only links to itself.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>👆🏽💡 That's no good! <em>Geoff</em> seems to be taking all the traffic on the micro-internet, and somehow coming at the top of the PageRank.
-This behaviour can be understood, because once a Pat get's to <em>Geoff's</em> Website, they can't leave, as all links head back to Geoff.</p>
+<p><code>More Sandpits</code></p>
 </div>
 </div>
 </div>
@@ -7983,42 +7602,8 @@ This behaviour can be understood, because once a Pat get's to <em>Geoff's</em> W
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<ul>
-<li><p>To combat this, I will add a small probability that the Procrastinating Pats don't follow any link on a webpage, but instead visit a website on the micro-internet at random.</p>
-</li>
-<li><p>I'll say the probability of them following a link is $d$ and the probability of choosing a random website is therefore $1-d$.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<ul>
-<li>Matrix to work out where the Pat's visit each minute.</li>
-</ul>
-<p>$$ M = d \, L + \frac{1-d}{n} \, J $$
-where $J$ is an $n\times n$ matrix where every element is one.</p>
-<ul>
-<li>If $d$ is one, we have the case we had previously,</li>
-<li>whereas if $d$ is zero, we will always visit a random webpage and therefore all webpages will be equally likely and equally ranked.
-For this extension to work best, $1-d$ should be somewhat small</li>
-</ul>
+<p>In a nearby building site, another phone has been dropped into a pit.
+I will use the gradient dip-stick and help out the supervisor.</p>
 </div>
 </div>
 </div>
@@ -8027,55 +7612,12 @@ For this extension to work best, $1-d$ should be somewhat small</li>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [53]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="mf">0.5</span> 
-<span class="n">M</span> <span class="o">=</span> <span class="n">d</span> <span class="o">*</span> <span class="n">L2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="mi">7</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span> <span class="c1"># np.ones() is the J matrix, with ones for each entry.</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">run</span> "sandpit-exercises.ipynb"
+<span class="n">sandpit_random</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [54]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="o">/</span> <span class="mi">7</span> <span class="c1"># Sets up this vector (6 entries of 1/6 × 100 each)</span>
-<span class="n">lastR</span> <span class="o">=</span> <span class="n">r</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">M</span> <span class="o">@</span> <span class="n">r</span>
-<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">while</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">lastR</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.01</span> <span class="p">:</span>
-    <span class="n">lastR</span> <span class="o">=</span> <span class="n">r</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">M</span> <span class="o">@</span> <span class="n">r</span>
-    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" iterations to convergence."</span><span class="p">)</span>
-<span class="n">r</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>8 iterations to convergence.
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[54]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([ 13.13619674,  11.11812027,  19.27885503,  14.33173875,
-         7.14285714,  20.70651779,  14.28571429])</pre>
 </div>
 </div>
 </div>
@@ -8087,13 +7629,29 @@ For this extension to work best, $1-d$ should be somewhat small</li>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>👆🏽💡 This is certainly better, the PageRank gives sensible numbers for the Procrastinating Pats that end up on each webpage.</p>
-<ul>
-<li>This method still predicts Geoff has a high ranking webpage however.<ul>
-<li>This could be seen as a consequence of using a small network.</li>
-</ul>
-</li>
-</ul>
+<p><img alt="S3" src="../images/s3.png"/></p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><code>Multiple Minima</code></p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>In this sandpit, there are many local minima that the supervisor's phone could have fallen into. The phone is in the deepest one - I will Try to find it!</p>
 </div>
 </div>
 </div>
@@ -8102,20 +7660,11 @@ For this extension to work best, $1-d$ should be somewhat small</li>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [57]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># function to provide the PageRank for an arbitrarily sized internet.</span>
-<span class="k">def</span> <span class="nf">pageRank</span><span class="p">(</span><span class="n">linkMatrix</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="p">:</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">linkMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="n">d</span> <span class="o">*</span> <span class="n">linkMatrix</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span> <span class="c1"># Sets up this vector (6 entries of 1/6 × 100 each)</span>
-    <span class="n">last</span> <span class="o">=</span> <span class="n">r</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">M</span> <span class="o">@</span> <span class="n">r</span>
-    <span class="k">while</span> <span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">last</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.01</span> <span class="p">:</span>
-        <span class="n">last</span> <span class="o">=</span> <span class="n">r</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">M</span> <span class="o">@</span> <span class="n">r</span>
-    <span class="k">return</span> <span class="n">r</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">run</span> "sandpit-exercises.ipynb"
+<span class="n">sandpit_multiple_minima</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -8128,38 +7677,29 @@ For this extension to work best, $1-d$ should be somewhat small</li>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><code> Testing  code </code></p>
+<p><img alt="S4" src="../images/s4.png"/></p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [58]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># function to generate internets of different sizes.</span>
-<span class="n">generate_internet</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><code>Noisy Functions</code></p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[58]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([[ 0.2,  0.2,  0. ,  0. ,  0. ],
-       [ 0.2,  0.2,  0. ,  0. ,  0. ],
-       [ 0.2,  0.2,  1. ,  0. ,  1. ],
-       [ 0.2,  0.2,  0. ,  1. ,  0. ],
-       [ 0.2,  0.2,  0. ,  0. ,  0. ]])</pre>
-</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Before the sand was loaded into this next pit, the pit floor was covered with rocks. This means when the supervisor tries to measure the slope, the surface they measure is rough and can change quickly. I will try to find the phone in this situation.</p>
 </div>
 </div>
 </div>
@@ -8168,929 +7708,12 @@ For this extension to work best, $1-d$ should be somewhat small</li>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [59]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Testing  PageRank method against the built in "eig" method.</span>
-<span class="n">L</span> <span class="o">=</span> <span class="n">generate_internet</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">run</span> "sandpit-exercises.ipynb"
+<span class="n">sandpit_rocks</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [60]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">pageRank</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[60]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([  0.00053572,   0.0003536 ,   0.0003536 ,   0.0003536 ,
-         0.0061807 ,   0.00079166,   0.00053572,   0.00047624,
-         0.00548013,   0.00047624,   0.00344066,   0.0003536 ,
-         0.0003536 ,   0.00225535,   0.00312437,   0.00420398,
-         0.00218721,   0.00278108,   0.00381154,   0.00170109,
-         0.0009468 ,   0.00140072,   0.00137978,   0.00208794,
-         0.0003536 ,   0.00630368,   0.00350216,   0.00253151,
-         0.00189229,   0.0003536 ,   0.00273879,   0.00642726,
-         0.0009387 ,   0.00296126,   0.00044466,   0.00047624,
-         0.00098202,   0.0017958 ,   0.00306999,   0.0068469 ,
-         0.00596314,   0.00541714,   0.00230353,   0.00576067,
-         0.00230855,   0.00307653,   0.00555144,   0.00299397,
-         0.00393591,   0.00917284,   0.00515033,   0.0009468 ,
-         0.00613249,   0.00227711,   0.0003536 ,   0.00101778,
-         0.00044466,   0.00334972,   0.00487762,   0.00113683,
-         0.00634293,   0.0054924 ,   0.00330237,   0.00332058,
-         0.00149375,   0.00293343,   0.0003536 ,   0.00297224,
-         0.00634293,   0.00486727,   0.00314597,   0.00152567,
-         0.00281521,   0.0035116 ,   0.01162886,   0.00568919,
-         0.00411333,   0.00493794,   0.01004156,   0.00333895,
-         0.00362047,   0.00047624,   0.00683398,  99.67767473,
-         0.00786871,   0.00375531,   0.00770889,   0.0012163 ,
-         0.0109128 ,   0.00147184,   0.00656999,   0.0007838 ,
-         0.00535205,   0.00167502,   0.00143621,   0.01047964,
-         0.00072625,   0.0021204 ,   0.00054062,   0.00125293])</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [61]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">eVals</span><span class="p">,</span> <span class="n">eVecs</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="c1"># Getting the eigenvalues and vectors</span>
-<span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">eVals</span><span class="p">)</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Ordering them by their eigenvalues</span>
-<span class="n">eVals</span> <span class="o">=</span> <span class="n">eVals</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
-<span class="n">eVecs</span> <span class="o">=</span> <span class="n">eVecs</span><span class="p">[:,</span><span class="n">order</span><span class="p">]</span>
-
-<span class="n">r</span> <span class="o">=</span> <span class="n">eVecs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-<span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">r</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[61]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>array([  0.00000007,   0.00000005,   0.00000005,   0.00000005,
-         0.00000066,   0.00000009,   0.00000007,   0.00000006,
-         0.00000059,   0.00000006,   0.00000041,   0.00000005,
-         0.00000005,   0.00000026,   0.00000036,   0.00000048,
-         0.00000025,   0.00000032,   0.00000043,   0.00000019,
-         0.00000011,   0.00000017,   0.00000017,   0.00000024,
-         0.00000005,   0.00000068,   0.00000037,   0.00000026,
-         0.00000021,   0.00000005,   0.00000031,   0.00000068,
-         0.00000011,   0.00000031,   0.00000006,   0.00000006,
-         0.00000013,   0.0000002 ,   0.00000035,   0.00000073,
-         0.00000064,   0.00000057,   0.00000026,   0.00000061,
-         0.00000025,   0.00000033,   0.00000058,   0.00000031,
-         0.00000042,   0.00000096,   0.00000054,   0.00000011,
-         0.00000064,   0.00000025,   0.00000005,   0.00000012,
-         0.00000006,   0.00000036,   0.00000053,   0.00000013,
-         0.00000064,   0.00000057,   0.00000035,   0.00000035,
-         0.00000016,   0.00000033,   0.00000005,   0.00000032,
-         0.00000064,   0.00000051,   0.00000032,   0.00000016,
-         0.00000029,   0.00000037,   0.00000119,   0.00000057,
-         0.00000044,   0.0000005 ,   0.00000103,   0.00000035,
-         0.00000037,   0.00000006,   0.00000071,  99.99996538,
-         0.00000079,   0.0000004 ,   0.00000079,   0.00000014,
-         0.00000114,   0.00000018,   0.00000069,   0.0000001 ,
-         0.00000058,   0.00000018,   0.00000017,   0.00000108,
-         0.00000009,   0.00000024,   0.00000007,   0.00000015])</pre>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [62]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># PageRank graph.</span>
-<span class="o">%</span><span class="k">pylab</span> notebook
-<span class="n">r</span> <span class="o">=</span> <span class="n">pageRank</span><span class="p">(</span><span class="n">generate_internet</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="mf">0.9</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">r</span><span class="p">);</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Populating the interactive namespace from numpy and matplotlib
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="39e80618-5d30-4402-8544-29fea8ba8e45" tabindex="0">
-<script type="text/javascript">
-var element = document.getElementById('39e80618-5d30-4402-8544-29fea8ba8e45');
-/* Put everything inside the global mpl namespace */
-window.mpl = {};
-
-
-mpl.get_websocket_type = function() {
-    if (typeof(WebSocket) !== 'undefined') {
-        return WebSocket;
-    } else if (typeof(MozWebSocket) !== 'undefined') {
-        return MozWebSocket;
-    } else {
-        alert('Your browser does not have WebSocket support.' +
-              'Please try Chrome, Safari or Firefox ≥ 6. ' +
-              'Firefox 4 and 5 are also supported but you ' +
-              'have to enable WebSockets in about:config.');
-    };
-}
-
-mpl.figure = function(figure_id, websocket, ondownload, parent_element) {
-    this.id = figure_id;
-
-    this.ws = websocket;
-
-    this.supports_binary = (this.ws.binaryType != undefined);
-
-    if (!this.supports_binary) {
-        var warnings = document.getElementById("mpl-warnings");
-        if (warnings) {
-            warnings.style.display = 'block';
-            warnings.textContent = (
-                "This browser does not support binary websocket messages. " +
-                    "Performance may be slow.");
-        }
-    }
-
-    this.imageObj = new Image();
-
-    this.context = undefined;
-    this.message = undefined;
-    this.canvas = undefined;
-    this.rubberband_canvas = undefined;
-    this.rubberband_context = undefined;
-    this.format_dropdown = undefined;
-
-    this.image_mode = 'full';
-
-    this.root = $('<div/>');
-    this._root_extra_style(this.root)
-    this.root.attr('style', 'display: inline-block');
-
-    $(parent_element).append(this.root);
-
-    this._init_header(this);
-    this._init_canvas(this);
-    this._init_toolbar(this);
-
-    var fig = this;
-
-    this.waiting = false;
-
-    this.ws.onopen =  function () {
-            fig.send_message("supports_binary", {value: fig.supports_binary});
-            fig.send_message("send_image_mode", {});
-            if (mpl.ratio != 1) {
-                fig.send_message("set_dpi_ratio", {'dpi_ratio': mpl.ratio});
-            }
-            fig.send_message("refresh", {});
-        }
-
-    this.imageObj.onload = function() {
-            if (fig.image_mode == 'full') {
-                // Full images could contain transparency (where diff images
-                // almost always do), so we need to clear the canvas so that
-                // there is no ghosting.
-                fig.context.clearRect(0, 0, fig.canvas.width, fig.canvas.height);
-            }
-            fig.context.drawImage(fig.imageObj, 0, 0);
-        };
-
-    this.imageObj.onunload = function() {
-        this.ws.close();
-    }
-
-    this.ws.onmessage = this._make_on_message_function(this);
-
-    this.ondownload = ondownload;
-}
-
-mpl.figure.prototype._init_header = function() {
-    var titlebar = $(
-        '<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ' +
-        'ui-helper-clearfix"/>');
-    var titletext = $(
-        '<div class="ui-dialog-title" style="width: 100%; ' +
-        'text-align: center; padding: 3px;"/>');
-    titlebar.append(titletext)
-    this.root.append(titlebar);
-    this.header = titletext[0];
-}
-
-
-
-mpl.figure.prototype._canvas_extra_style = function(canvas_div) {
-
-}
-
-
-mpl.figure.prototype._root_extra_style = function(canvas_div) {
-
-}
-
-mpl.figure.prototype._init_canvas = function() {
-    var fig = this;
-
-    var canvas_div = $('<div/>');
-
-    canvas_div.attr('style', 'position: relative; clear: both; outline: 0');
-
-    function canvas_keyboard_event(event) {
-        return fig.key_event(event, event['data']);
-    }
-
-    canvas_div.keydown('key_press', canvas_keyboard_event);
-    canvas_div.keyup('key_release', canvas_keyboard_event);
-    this.canvas_div = canvas_div
-    this._canvas_extra_style(canvas_div)
-    this.root.append(canvas_div);
-
-    var canvas = $('<canvas/>');
-    canvas.addClass('mpl-canvas');
-    canvas.attr('style', "left: 0; top: 0; z-index: 0; outline: 0")
-
-    this.canvas = canvas[0];
-    this.context = canvas[0].getContext("2d");
-
-    var backingStore = this.context.backingStorePixelRatio ||
-	this.context.webkitBackingStorePixelRatio ||
-	this.context.mozBackingStorePixelRatio ||
-	this.context.msBackingStorePixelRatio ||
-	this.context.oBackingStorePixelRatio ||
-	this.context.backingStorePixelRatio || 1;
-
-    mpl.ratio = (window.devicePixelRatio || 1) / backingStore;
-
-    var rubberband = $('<canvas/>');
-    rubberband.attr('style', "position: absolute; left: 0; top: 0; z-index: 1;")
-
-    var pass_mouse_events = true;
-
-    canvas_div.resizable({
-        start: function(event, ui) {
-            pass_mouse_events = false;
-        },
-        resize: function(event, ui) {
-            fig.request_resize(ui.size.width, ui.size.height);
-        },
-        stop: function(event, ui) {
-            pass_mouse_events = true;
-            fig.request_resize(ui.size.width, ui.size.height);
-        },
-    });
-
-    function mouse_event_fn(event) {
-        if (pass_mouse_events)
-            return fig.mouse_event(event, event['data']);
-    }
-
-    rubberband.mousedown('button_press', mouse_event_fn);
-    rubberband.mouseup('button_release', mouse_event_fn);
-    // Throttle sequential mouse events to 1 every 20ms.
-    rubberband.mousemove('motion_notify', mouse_event_fn);
-
-    rubberband.mouseenter('figure_enter', mouse_event_fn);
-    rubberband.mouseleave('figure_leave', mouse_event_fn);
-
-    canvas_div.on("wheel", function (event) {
-        event = event.originalEvent;
-        event['data'] = 'scroll'
-        if (event.deltaY < 0) {
-            event.step = 1;
-        } else {
-            event.step = -1;
-        }
-        mouse_event_fn(event);
-    });
-
-    canvas_div.append(canvas);
-    canvas_div.append(rubberband);
-
-    this.rubberband = rubberband;
-    this.rubberband_canvas = rubberband[0];
-    this.rubberband_context = rubberband[0].getContext("2d");
-    this.rubberband_context.strokeStyle = "#000000";
-
-    this._resize_canvas = function(width, height) {
-        // Keep the size of the canvas, canvas container, and rubber band
-        // canvas in synch.
-        canvas_div.css('width', width)
-        canvas_div.css('height', height)
-
-        canvas.attr('width', width * mpl.ratio);
-        canvas.attr('height', height * mpl.ratio);
-        canvas.attr('style', 'width: ' + width + 'px; height: ' + height + 'px;');
-
-        rubberband.attr('width', width);
-        rubberband.attr('height', height);
-    }
-
-    // Set the figure to an initial 600x600px, this will subsequently be updated
-    // upon first draw.
-    this._resize_canvas(600, 600);
-
-    // Disable right mouse context menu.
-    $(this.rubberband_canvas).bind("contextmenu",function(e){
-        return false;
-    });
-
-    function set_focus () {
-        canvas.focus();
-        canvas_div.focus();
-    }
-
-    window.setTimeout(set_focus, 100);
-}
-
-mpl.figure.prototype._init_toolbar = function() {
-    var fig = this;
-
-    var nav_element = $('<div/>')
-    nav_element.attr('style', 'width: 100%');
-    this.root.append(nav_element);
-
-    // Define a callback function for later on.
-    function toolbar_event(event) {
-        return fig.toolbar_button_onclick(event['data']);
-    }
-    function toolbar_mouse_event(event) {
-        return fig.toolbar_button_onmouseover(event['data']);
-    }
-
-    for(var toolbar_ind in mpl.toolbar_items) {
-        var name = mpl.toolbar_items[toolbar_ind][0];
-        var tooltip = mpl.toolbar_items[toolbar_ind][1];
-        var image = mpl.toolbar_items[toolbar_ind][2];
-        var method_name = mpl.toolbar_items[toolbar_ind][3];
-
-        if (!name) {
-            // put a spacer in here.
-            continue;
-        }
-        var button = $('<button/>');
-        button.addClass('ui-button ui-widget ui-state-default ui-corner-all ' +
-                        'ui-button-icon-only');
-        button.attr('role', 'button');
-        button.attr('aria-disabled', 'false');
-        button.click(method_name, toolbar_event);
-        button.mouseover(tooltip, toolbar_mouse_event);
-
-        var icon_img = $('<span/>');
-        icon_img.addClass('ui-button-icon-primary ui-icon');
-        icon_img.addClass(image);
-        icon_img.addClass('ui-corner-all');
-
-        var tooltip_span = $('<span/>');
-        tooltip_span.addClass('ui-button-text');
-        tooltip_span.html(tooltip);
-
-        button.append(icon_img);
-        button.append(tooltip_span);
-
-        nav_element.append(button);
-    }
-
-    var fmt_picker_span = $('<span/>');
-
-    var fmt_picker = $('<select/>');
-    fmt_picker.addClass('mpl-toolbar-option ui-widget ui-widget-content');
-    fmt_picker_span.append(fmt_picker);
-    nav_element.append(fmt_picker_span);
-    this.format_dropdown = fmt_picker[0];
-
-    for (var ind in mpl.extensions) {
-        var fmt = mpl.extensions[ind];
-        var option = $(
-            '<option/>', {selected: fmt === mpl.default_extension}).html(fmt);
-        fmt_picker.append(option)
-    }
-
-    // Add hover states to the ui-buttons
-    $( ".ui-button" ).hover(
-        function() { $(this).addClass("ui-state-hover");},
-        function() { $(this).removeClass("ui-state-hover");}
-    );
-
-    var status_bar = $('<span class="mpl-message"/>');
-    nav_element.append(status_bar);
-    this.message = status_bar[0];
-}
-
-mpl.figure.prototype.request_resize = function(x_pixels, y_pixels) {
-    // Request matplotlib to resize the figure. Matplotlib will then trigger a resize in the client,
-    // which will in turn request a refresh of the image.
-    this.send_message('resize', {'width': x_pixels, 'height': y_pixels});
-}
-
-mpl.figure.prototype.send_message = function(type, properties) {
-    properties['type'] = type;
-    properties['figure_id'] = this.id;
-    this.ws.send(JSON.stringify(properties));
-}
-
-mpl.figure.prototype.send_draw_message = function() {
-    if (!this.waiting) {
-        this.waiting = true;
-        this.ws.send(JSON.stringify({type: "draw", figure_id: this.id}));
-    }
-}
-
-
-mpl.figure.prototype.handle_save = function(fig, msg) {
-    var format_dropdown = fig.format_dropdown;
-    var format = format_dropdown.options[format_dropdown.selectedIndex].value;
-    fig.ondownload(fig, format);
-}
-
-
-mpl.figure.prototype.handle_resize = function(fig, msg) {
-    var size = msg['size'];
-    if (size[0] != fig.canvas.width || size[1] != fig.canvas.height) {
-        fig._resize_canvas(size[0], size[1]);
-        fig.send_message("refresh", {});
-    };
-}
-
-mpl.figure.prototype.handle_rubberband = function(fig, msg) {
-    var x0 = msg['x0'] / mpl.ratio;
-    var y0 = (fig.canvas.height - msg['y0']) / mpl.ratio;
-    var x1 = msg['x1'] / mpl.ratio;
-    var y1 = (fig.canvas.height - msg['y1']) / mpl.ratio;
-    x0 = Math.floor(x0) + 0.5;
-    y0 = Math.floor(y0) + 0.5;
-    x1 = Math.floor(x1) + 0.5;
-    y1 = Math.floor(y1) + 0.5;
-    var min_x = Math.min(x0, x1);
-    var min_y = Math.min(y0, y1);
-    var width = Math.abs(x1 - x0);
-    var height = Math.abs(y1 - y0);
-
-    fig.rubberband_context.clearRect(
-        0, 0, fig.canvas.width, fig.canvas.height);
-
-    fig.rubberband_context.strokeRect(min_x, min_y, width, height);
-}
-
-mpl.figure.prototype.handle_figure_label = function(fig, msg) {
-    // Updates the figure title.
-    fig.header.textContent = msg['label'];
-}
-
-mpl.figure.prototype.handle_cursor = function(fig, msg) {
-    var cursor = msg['cursor'];
-    switch(cursor)
-    {
-    case 0:
-        cursor = 'pointer';
-        break;
-    case 1:
-        cursor = 'default';
-        break;
-    case 2:
-        cursor = 'crosshair';
-        break;
-    case 3:
-        cursor = 'move';
-        break;
-    }
-    fig.rubberband_canvas.style.cursor = cursor;
-}
-
-mpl.figure.prototype.handle_message = function(fig, msg) {
-    fig.message.textContent = msg['message'];
-}
-
-mpl.figure.prototype.handle_draw = function(fig, msg) {
-    // Request the server to send over a new figure.
-    fig.send_draw_message();
-}
-
-mpl.figure.prototype.handle_image_mode = function(fig, msg) {
-    fig.image_mode = msg['mode'];
-}
-
-mpl.figure.prototype.updated_canvas_event = function() {
-    // Called whenever the canvas gets updated.
-    this.send_message("ack", {});
-}
-
-// A function to construct a web socket function for onmessage handling.
-// Called in the figure constructor.
-mpl.figure.prototype._make_on_message_function = function(fig) {
-    return function socket_on_message(evt) {
-        if (evt.data instanceof Blob) {
-            /* FIXME: We get "Resource interpreted as Image but
-             * transferred with MIME type text/plain:" errors on
-             * Chrome.  But how to set the MIME type?  It doesn't seem
-             * to be part of the websocket stream */
-            evt.data.type = "image/png";
-
-            /* Free the memory for the previous frames */
-            if (fig.imageObj.src) {
-                (window.URL || window.webkitURL).revokeObjectURL(
-                    fig.imageObj.src);
-            }
-
-            fig.imageObj.src = (window.URL || window.webkitURL).createObjectURL(
-                evt.data);
-            fig.updated_canvas_event();
-            fig.waiting = false;
-            return;
-        }
-        else if (typeof evt.data === 'string' && evt.data.slice(0, 21) == "data:image/png;base64") {
-            fig.imageObj.src = evt.data;
-            fig.updated_canvas_event();
-            fig.waiting = false;
-            return;
-        }
-
-        var msg = JSON.parse(evt.data);
-        var msg_type = msg['type'];
-
-        // Call the  "handle_{type}" callback, which takes
-        // the figure and JSON message as its only arguments.
-        try {
-            var callback = fig["handle_" + msg_type];
-        } catch (e) {
-            console.log("No handler for the '" + msg_type + "' message type: ", msg);
-            return;
-        }
-
-        if (callback) {
-            try {
-                // console.log("Handling '" + msg_type + "' message: ", msg);
-                callback(fig, msg);
-            } catch (e) {
-                console.log("Exception inside the 'handler_" + msg_type + "' callback:", e, e.stack, msg);
-            }
-        }
-    };
-}
-
-// from http://stackoverflow.com/questions/1114465/getting-mouse-location-in-canvas
-mpl.findpos = function(e) {
-    //this section is from http://www.quirksmode.org/js/events_properties.html
-    var targ;
-    if (!e)
-        e = window.event;
-    if (e.target)
-        targ = e.target;
-    else if (e.srcElement)
-        targ = e.srcElement;
-    if (targ.nodeType == 3) // defeat Safari bug
-        targ = targ.parentNode;
-
-    // jQuery normalizes the pageX and pageY
-    // pageX,Y are the mouse positions relative to the document
-    // offset() returns the position of the element relative to the document
-    var x = e.pageX - $(targ).offset().left;
-    var y = e.pageY - $(targ).offset().top;
-
-    return {"x": x, "y": y};
-};
-
-/*
- * return a copy of an object with only non-object keys
- * we need this to avoid circular references
- * http://stackoverflow.com/a/24161582/3208463
- */
-function simpleKeys (original) {
-  return Object.keys(original).reduce(function (obj, key) {
-    if (typeof original[key] !== 'object')
-        obj[key] = original[key]
-    return obj;
-  }, {});
-}
-
-mpl.figure.prototype.mouse_event = function(event, name) {
-    var canvas_pos = mpl.findpos(event)
-
-    if (name === 'button_press')
-    {
-        this.canvas.focus();
-        this.canvas_div.focus();
-    }
-
-    var x = canvas_pos.x * mpl.ratio;
-    var y = canvas_pos.y * mpl.ratio;
-
-    this.send_message(name, {x: x, y: y, button: event.button,
-                             step: event.step,
-                             guiEvent: simpleKeys(event)});
-
-    /* This prevents the web browser from automatically changing to
-     * the text insertion cursor when the button is pressed.  We want
-     * to control all of the cursor setting manually through the
-     * 'cursor' event from matplotlib */
-    event.preventDefault();
-    return false;
-}
-
-mpl.figure.prototype._key_event_extra = function(event, name) {
-    // Handle any extra behaviour associated with a key event
-}
-
-mpl.figure.prototype.key_event = function(event, name) {
-
-    // Prevent repeat events
-    if (name == 'key_press')
-    {
-        if (event.which === this._key)
-            return;
-        else
-            this._key = event.which;
-    }
-    if (name == 'key_release')
-        this._key = null;
-
-    var value = '';
-    if (event.ctrlKey && event.which != 17)
-        value += "ctrl+";
-    if (event.altKey && event.which != 18)
-        value += "alt+";
-    if (event.shiftKey && event.which != 16)
-        value += "shift+";
-
-    value += 'k';
-    value += event.which.toString();
-
-    this._key_event_extra(event, name);
-
-    this.send_message(name, {key: value,
-                             guiEvent: simpleKeys(event)});
-    return false;
-}
-
-mpl.figure.prototype.toolbar_button_onclick = function(name) {
-    if (name == 'download') {
-        this.handle_save(this, null);
-    } else {
-        this.send_message("toolbar_button", {name: name});
-    }
-};
-
-mpl.figure.prototype.toolbar_button_onmouseover = function(tooltip) {
-    this.message.textContent = tooltip;
-};
-mpl.toolbar_items = [["Home", "Reset original view", "fa fa-home icon-home", "home"], ["Back", "Back to  previous view", "fa fa-arrow-left icon-arrow-left", "back"], ["Forward", "Forward to next view", "fa fa-arrow-right icon-arrow-right", "forward"], ["", "", "", ""], ["Pan", "Pan axes with left mouse, zoom with right", "fa fa-arrows icon-move", "pan"], ["Zoom", "Zoom to rectangle", "fa fa-square-o icon-check-empty", "zoom"], ["", "", "", ""], ["Download", "Download plot", "fa fa-floppy-o icon-save", "download"]];
-
-mpl.extensions = ["eps", "jpeg", "pdf", "png", "ps", "raw", "svg", "tif"];
-
-mpl.default_extension = "png";var comm_websocket_adapter = function(comm) {
-    // Create a "websocket"-like object which calls the given IPython comm
-    // object with the appropriate methods. Currently this is a non binary
-    // socket, so there is still some room for performance tuning.
-    var ws = {};
-
-    ws.close = function() {
-        comm.close()
-    };
-    ws.send = function(m) {
-        //console.log('sending', m);
-        comm.send(m);
-    };
-    // Register the callback with on_msg.
-    comm.on_msg(function(msg) {
-        //console.log('receiving', msg['content']['data'], msg);
-        // Pass the mpl event to the overriden (by mpl) onmessage function.
-        ws.onmessage(msg['content']['data'])
-    });
-    return ws;
-}
-
-mpl.mpl_figure_comm = function(comm, msg) {
-    // This is the function which gets called when the mpl process
-    // starts-up an IPython Comm through the "matplotlib" channel.
-
-    var id = msg.content.data.id;
-    // Get hold of the div created by the display call when the Comm
-    // socket was opened in Python.
-    var element = $("#" + id);
-    var ws_proxy = comm_websocket_adapter(comm)
-
-    function ondownload(figure, format) {
-        window.open(figure.imageObj.src);
-    }
-
-    var fig = new mpl.figure(id, ws_proxy,
-                           ondownload,
-                           element.get(0));
-
-    // Call onopen now - mpl needs it, as it is assuming we've passed it a real
-    // web socket which is closed, not our websocket->open comm proxy.
-    ws_proxy.onopen();
-
-    fig.parent_element = element.get(0);
-    fig.cell_info = mpl.find_output_cell("<div id='" + id + "'></div>");
-    if (!fig.cell_info) {
-        console.error("Failed to find cell for figure", id, fig);
-        return;
-    }
-
-    var output_index = fig.cell_info[2]
-    var cell = fig.cell_info[0];
-
-};
-
-mpl.figure.prototype.handle_close = function(fig, msg) {
-    var width = fig.canvas.width/mpl.ratio
-    fig.root.unbind('remove')
-
-    // Update the output cell to use the data from the current canvas.
-    fig.push_to_output();
-    var dataURL = fig.canvas.toDataURL();
-    // Re-enable the keyboard manager in IPython - without this line, in FF,
-    // the notebook keyboard shortcuts fail.
-    IPython.keyboard_manager.enable()
-    $(fig.parent_element).html('<img src="' + dataURL + '" width="' + width + '">');
-    fig.close_ws(fig, msg);
-}
-
-mpl.figure.prototype.close_ws = function(fig, msg){
-    fig.send_message('closing', msg);
-    // fig.ws.close()
-}
-
-mpl.figure.prototype.push_to_output = function(remove_interactive) {
-    // Turn the data on the canvas into data in the output cell.
-    var width = this.canvas.width/mpl.ratio
-    var dataURL = this.canvas.toDataURL();
-    this.cell_info[1]['text/html'] = '<img src="' + dataURL + '" width="' + width + '">';
-}
-
-mpl.figure.prototype.updated_canvas_event = function() {
-    // Tell IPython that the notebook contents must change.
-    IPython.notebook.set_dirty(true);
-    this.send_message("ack", {});
-    var fig = this;
-    // Wait a second, then push the new image to the DOM so
-    // that it is saved nicely (might be nice to debounce this).
-    setTimeout(function () { fig.push_to_output() }, 1000);
-}
-
-mpl.figure.prototype._init_toolbar = function() {
-    var fig = this;
-
-    var nav_element = $('<div/>')
-    nav_element.attr('style', 'width: 100%');
-    this.root.append(nav_element);
-
-    // Define a callback function for later on.
-    function toolbar_event(event) {
-        return fig.toolbar_button_onclick(event['data']);
-    }
-    function toolbar_mouse_event(event) {
-        return fig.toolbar_button_onmouseover(event['data']);
-    }
-
-    for(var toolbar_ind in mpl.toolbar_items){
-        var name = mpl.toolbar_items[toolbar_ind][0];
-        var tooltip = mpl.toolbar_items[toolbar_ind][1];
-        var image = mpl.toolbar_items[toolbar_ind][2];
-        var method_name = mpl.toolbar_items[toolbar_ind][3];
-
-        if (!name) { continue; };
-
-        var button = $('<button class="btn btn-default" href="#" title="' + name + '"><i class="fa ' + image + ' fa-lg"></i></button>');
-        button.click(method_name, toolbar_event);
-        button.mouseover(tooltip, toolbar_mouse_event);
-        nav_element.append(button);
-    }
-
-    // Add the status bar.
-    var status_bar = $('<span class="mpl-message" style="text-align:right; float: right;"/>');
-    nav_element.append(status_bar);
-    this.message = status_bar[0];
-
-    // Add the close button to the window.
-    var buttongrp = $('<div class="btn-group inline pull-right"></div>');
-    var button = $('<button class="btn btn-mini btn-primary" href="#" title="Stop Interaction"><i class="fa fa-power-off icon-remove icon-large"></i></button>');
-    button.click(function (evt) { fig.handle_close(fig, {}); } );
-    button.mouseover('Stop Interaction', toolbar_mouse_event);
-    buttongrp.append(button);
-    var titlebar = this.root.find($('.ui-dialog-titlebar'));
-    titlebar.prepend(buttongrp);
-}
-
-mpl.figure.prototype._root_extra_style = function(el){
-    var fig = this
-    el.on("remove", function(){
-	fig.close_ws(fig, {});
-    });
-}
-
-mpl.figure.prototype._canvas_extra_style = function(el){
-    // this is important to make the div 'focusable
-    el.attr('tabindex', 0)
-    // reach out to IPython and tell the keyboard manager to turn it's self
-    // off when our div gets focus
-
-    // location in version 3
-    if (IPython.notebook.keyboard_manager) {
-        IPython.notebook.keyboard_manager.register_events(el);
-    }
-    else {
-        // location in version 2
-        IPython.keyboard_manager.register_events(el);
-    }
-
-}
-
-mpl.figure.prototype._key_event_extra = function(event, name) {
-    var manager = IPython.notebook.keyboard_manager;
-    if (!manager)
-        manager = IPython.keyboard_manager;
-
-    // Check for shift+enter
-    if (event.shiftKey && event.which == 13) {
-        this.canvas_div.blur();
-        // select the cell after this one
-        var index = IPython.notebook.find_cell_index(this.cell_info[0]);
-        IPython.notebook.select(index + 1);
-    }
-}
-
-mpl.figure.prototype.handle_save = function(fig, msg) {
-    fig.ondownload(fig, null);
-}
-
-
-mpl.find_output_cell = function(html_output) {
-    // Return the cell and output element which can be found *uniquely* in the notebook.
-    // Note - this is a bit hacky, but it is done because the "notebook_saving.Notebook"
-    // IPython event is triggered only after the cells have been serialised, which for
-    // our purposes (turning an active figure into a static one), is too late.
-    var cells = IPython.notebook.get_cells();
-    var ncells = cells.length;
-    for (var i=0; i<ncells; i++) {
-        var cell = cells[i];
-        if (cell.cell_type === 'code'){
-            for (var j=0; j<cell.output_area.outputs.length; j++) {
-                var data = cell.output_area.outputs[j];
-                if (data.data) {
-                    // IPython >= 3 moved mimebundle to data attribute of output
-                    data = data.data;
-                }
-                if (data['text/html'] == html_output) {
-                    return [cell, data, j];
-                }
-            }
-        }
-    }
-}
-
-// Register the function which deals with the matplotlib target/channel.
-// The kernel may be null if the page has been refreshed.
-if (IPython.notebook.kernel != null) {
-    IPython.notebook.kernel.comm_manager.register_target('matplotlib', mpl.mpl_figure_comm);
-}
-
-</script>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<img alt="No description has been provided for this image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAHgCAYAAAA10dzkAAAAAXNSR0IArs4c6QAAIABJREFUeF7t3QusrVtV2PGDaDGGe9A2WhFuNAYfNb4RH6CIxmgRG8XUR62Jl6r4an2QIKA09/qI4ht80WqiYOMjKJEabX01XI2P+ihootY3yL1gwUh6sFZKonTMc/eGzb5nnz3XGGOvs+b+fisZufueM8f4vvmfY83139+31joPuOKBAAIIIIAAAgggsCkCD9jUbE0WAQQQQAABBBBA4AoB1AQIIIAAAggggMDGCBDAjS246SKAAAIIIIAAAgRQDyCAAAIIIIAAAhsjQAA3tuCmiwACCCCAAAIIEEA9gAACCCCAAAIIbIwAAdzYgpsuAggggAACCCBAAPUAAggggAACCCCwMQIEcGMLbroIIIAAAggggAAB1AMIIIAAAggggMDGCBDAjS246SKAAAIIIIAAAgRQDyCAAAIIIIAAAhsjQAA3tuCmiwACCCCAAAIIEEA9gAACCCCAAAIIbIwAAdzYgpsuAggggAACCCBAAPUAAggggAACCCCwMQIEcGMLbroIIIAAAggggAAB1AMIIIAAAggggMDGCBDAjS246SKAAAIIIIAAAgRQDyCAAAIIIIAAAhsjQAA3tuCmiwACCCCAAAIIEEA9gAACCCCAAAIIbIwAAdzYgpsuAggggAACCCBAAPUAAggggAACCCCwMQIEcGMLbroIIIAAAggggAAB1AMIIIAAAggggMDGCBDAjS246SKAAAIIIIAAAgRQDyCAAAIIIIAAAhsjQAA3tuCmiwACCCCAAAIIEEA9gAACCCCAAAIIbIwAAdzYgpsuAggggAACCCBAAPUAAggggAACCCCwMQIEcGMLbroIIIAAAggggAAB1AMIIIAAAggggMDGCBDAjS246SKAAAIIIIAAAgRQDyCAAAIIIIAAAhsjQAA3tuCmiwACCCCAAAIIEEA9gAACCCCAAAIIbIwAAdzYgpsuAggggAACCCBAAPUAAggggAACCCCwMQIEcGMLbroIIIAAAggggAAB1AMIIIAAAggggMDGCBDAjS246SKAAAIIIIAAAgRQDyCAAAIIIIAAAhsjQAA3tuCmiwACCCCAAAIIEEA9gAACCCCAAAIIbIwAAdzYgpsuAggggAACCCBAAPUAAggggAACCCCwMQIEcGML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" width="640"/>
 </div>
 </div>
 </div>
@@ -9102,11 +7725,54 @@ if (IPython.notebook.kernel != null) {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Author">Author<a class="anchor-link" href="#Author">¶</a></h1><p><a href="https://www.linkedin.com/in/helena-mbeua-pedro/">Helena Pedro</a> is a Data Scientist at Millennium Atlantic Bank in Angola. She is a Creative big thinker passionated about using data and optimization tools to direct decision making and solve complex and large-scale challenges.</p>
-<ul>
-<li><strong>Email:</strong> mbeua94@gmail.com</li>
-</ul>
-<p>© 2021</p>
+<p><img alt="S5" src="../images/s5.png"/></p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><code>Narrow Wells</code></p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>In this pit, there is a deep but narrow well that the phone may have fallen into. I will try to find the phone in this case.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><img alt="S6" src="../images/s6.png"/></p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+</div>
 </div>
 </div>
 </div>
